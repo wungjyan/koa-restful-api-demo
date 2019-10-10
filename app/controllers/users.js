@@ -29,6 +29,7 @@ class UsersCtl {
 
   // 授权
   async checkOwner(ctx, next) {
+    // token解析成功后会把用户信息保存在 ctx.state 上
     if (ctx.params.id !== ctx.state.user._id) {
       ctx.throw(403, '没有权限')
     }
@@ -87,6 +88,7 @@ class UsersCtl {
     ctx.body = users
   }
 
+  // 检查用户是否存在
   async checkUserExist(ctx, next) {
     const user = await User.findById(ctx.params.id)
     if (!user) {
@@ -104,6 +106,7 @@ class UsersCtl {
     }
     ctx.status = 204
   }
+  // 取消关注
   async unfollow(ctx) {
     const me = await User.findById(ctx.state.user._id).select('+following')
     // 要取消关注的人的id在所有关注人列表里的索引

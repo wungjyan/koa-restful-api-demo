@@ -28,6 +28,8 @@ const {
 //   }
 //   await next()
 // }
+
+// 使用 koa-jwt简化操作， 实际类似上面注释部分代码
 const auth = jwt({ secret: 'jwt-secret' })
 
 router.get('/', find)
