@@ -35,6 +35,7 @@ class UsersCtl {
     }
     await next()
   }
+
   async update(ctx) {
     ctx.verifyParams({
       name: { type: 'string', required: false },
@@ -81,6 +82,7 @@ class UsersCtl {
     }
     ctx.body = user.following
   }
+
   // 粉丝列表
   async listFollowers(ctx) {
     // 查找所有用户，他们的关注列表里包含了请求人的id
@@ -96,6 +98,7 @@ class UsersCtl {
     }
     await next()
   }
+
   // 关注
   async follow(ctx) {
     const me = await User.findById(ctx.state.user._id).select('+following')
@@ -106,6 +109,7 @@ class UsersCtl {
     }
     ctx.status = 204
   }
+
   // 取消关注
   async unfollow(ctx) {
     const me = await User.findById(ctx.state.user._id).select('+following')
