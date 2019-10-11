@@ -88,7 +88,7 @@ class UsersCtl {
     ctx.body = users
   }
 
-  // 检查用户是否存在
+  // 检查用户是否存在的中间件
   async checkUserExist(ctx, next) {
     const user = await User.findById(ctx.params.id)
     if (!user) {
