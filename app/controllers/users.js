@@ -5,13 +5,27 @@ class UsersCtl {
     const { per_page = 10 } = ctx.query
     const page = Math.max(ctx.query.page * 1, 1)
     const perPage = Math.max(per_page * 1, 1)
-    ctx.body = await User.find()
+    ctx.body = await User.find({ name: new RegExp(ctx.query.q) })
       .limit(perPage)
       .skip((page - 1) * perPage)
   }
 
   async findById(ctx) {
+    const { fields = '' } = ctx.query
+    const selectFields = fields
+      .split(';')
+      .filter(f => f)
+      .map(f => '+' + f)
+      .join('')
+    // 动态生成 populate
+    const populateStr = fields
+      .split(';')
+      .filter(f => f)
+      .map(f => f)
+      .join('')
     const user = await User.findById(ctx.params.id)
+      .select(selectFields)
+      .populate(populateStr) // populate填充的字段会被返回，且值是引用的某一表
     if (!user) {
       ctx.throw(404, '用户不存在')
     }
