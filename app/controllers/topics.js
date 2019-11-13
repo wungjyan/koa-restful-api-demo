@@ -1,4 +1,5 @@
 const Topic = require('../models/topics')
+const User = require('../models/topics')
 
 class TopicCtl {
   async find(ctx) {
@@ -37,6 +38,19 @@ class TopicCtl {
     // 此处的topic是更新前的topic
     const topic = await Topic.findByIdAndUpdate(ctx.params.id, ctx.request.body)
     ctx.body = topic
+  }
+  // 检查话题是否存在
+  async checkTopicExist(ctx, next) {
+    const topic = await Topic.findById(ctx.params.id)
+    if (!topic) {
+      ctx.throw(404, '话题不存在')
+    }
+    await next()
+  }
+  // 某话题下的所有关注人员
+  async listTopicFollowers(ctx) {
+    const users = await User.find({ followingTopics: ctx.params.id })
+    ctx.body = users
   }
 }
 
